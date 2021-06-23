@@ -17,5 +17,22 @@ class ApplicationController < Sinatra::Base
   # method "URL" do
     
   # end
+  get "/hi" do 
+    { hello: "world" }.to_json
+  end
+
+  get "/paintings" do 
+    paintings = Painting.all
+    paintings.to_json(include: :artist)
+  end
+
+  post "/new_painting" do
+    puts params.inspect
+    painting_params = params.select do |key| 
+      ["image", "title", "artist_name", "date", "width", "height"].include?(key)
+    end
+    painting = Painting.create(painting_params)
+    painting.to_json
+  end
 
 end
